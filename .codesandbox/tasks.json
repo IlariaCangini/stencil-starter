@@ -12,11 +12,17 @@
     "start:dist": {
       "name": "start:dist",
       "command": "pnpm start",
-      "runAtStart": true
+      "runAtStart": true,
+      "preview": {
+        "port": 3000
+      }
     },
     "start:custom-elements": {
       "name": "start:custom-elements",
-      "command": "pnpm start:custom-elements"
+      "command": "pnpm start:custom-elements",
+      "preview": {
+        "port": 3000
+      }
     },
     "build": {
       "name": "build",
