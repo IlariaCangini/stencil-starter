@@ -34,7 +34,7 @@
   "scripts": {
     "build": "stencil build",
     "start": "stencil build --dev --watch --serve",
-    "start:custom-elements": "concurrently \"stencil build --dev --watch\" \"browser-sync start --server --files 'dist/**/*' 'custom-elements.html' --startPath custom-elements.html --logLevel silent\"",
+    "start:custom-elements": "concurrently \"stencil build --dev --watch\" \"browser-sync start --server --files 'dist/**/*' 'custom-elements.html' --index custom-elements.html --logLevel silent\"",
     "test": "stencil test --spec",
     "test:watch": "stencil test --spec --watchAll",
     "generate": "stencil generate"
