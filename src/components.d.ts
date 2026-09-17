@@ -6,6 +6,8 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface AppRoot {
+    }
     interface MyComponent {
         /**
           * The first name
@@ -20,12 +22,24 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface MyComponent1 {
+        "myMethod1": () => Promise<void>;
+    }
+    interface MyComponent2 {
+        "myMethod2": () => Promise<void>;
+    }
 }
 export interface MyComponentCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLMyComponentElement;
 }
 declare global {
+    interface HTMLAppRootElement extends Components.AppRoot, HTMLStencilElement {
+    }
+    var HTMLAppRootElement: {
+        prototype: HTMLAppRootElement;
+        new (): HTMLAppRootElement;
+    };
     interface HTMLMyComponentElementEventMap {
         "buttonClick": number;
     }
@@ -43,11 +57,28 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLMyComponent1Element extends Components.MyComponent1, HTMLStencilElement {
+    }
+    var HTMLMyComponent1Element: {
+        prototype: HTMLMyComponent1Element;
+        new (): HTMLMyComponent1Element;
+    };
+    interface HTMLMyComponent2Element extends Components.MyComponent2, HTMLStencilElement {
+    }
+    var HTMLMyComponent2Element: {
+        prototype: HTMLMyComponent2Element;
+        new (): HTMLMyComponent2Element;
+    };
     interface HTMLElementTagNameMap {
+        "app-root": HTMLAppRootElement;
         "my-component": HTMLMyComponentElement;
+        "my-component-1": HTMLMyComponent1Element;
+        "my-component-2": HTMLMyComponent2Element;
     }
 }
 declare namespace LocalJSX {
+    interface AppRoot {
+    }
     interface MyComponent {
         /**
           * The first name
@@ -66,15 +97,32 @@ declare namespace LocalJSX {
          */
         "onButtonClick"?: (event: MyComponentCustomEvent<number>) => void;
     }
+    interface MyComponent1 {
+    }
+    interface MyComponent2 {
+    }
+
+    interface MyComponentAttributes {
+        "first": string;
+        "middle": string;
+        "last": string;
+    }
+
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "app-root": AppRoot;
+        "my-component": Omit<MyComponent, keyof MyComponentAttributes> & { [K in keyof MyComponent & keyof MyComponentAttributes]?: MyComponent[K] } & { [K in keyof MyComponent & keyof MyComponentAttributes as `attr:${K}`]?: MyComponentAttributes[K] } & { [K in keyof MyComponent & keyof MyComponentAttributes as `prop:${K}`]?: MyComponent[K] };
+        "my-component-1": MyComponent1;
+        "my-component-2": MyComponent2;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "app-root": LocalJSX.IntrinsicElements["app-root"] & JSXBase.HTMLAttributes<HTMLAppRootElement>;
+            "my-component": LocalJSX.IntrinsicElements["my-component"] & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "my-component-1": LocalJSX.IntrinsicElements["my-component-1"] & JSXBase.HTMLAttributes<HTMLMyComponent1Element>;
+            "my-component-2": LocalJSX.IntrinsicElements["my-component-2"] & JSXBase.HTMLAttributes<HTMLMyComponent2Element>;
         }
     }
 }
